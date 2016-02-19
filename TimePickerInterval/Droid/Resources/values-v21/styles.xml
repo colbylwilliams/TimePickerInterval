@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+	<style
+		name="IntervalPickerTheme"
+		parent="Theme.AppCompat.Dialog">
+		<item
+			name="android:timePickerStyle">@style/IntervalPickerTheme.Dialog.Alert</item>
+	</style>
+	<style
+		name="IntervalPickerTheme.Dialog.Alert"
+		parent="Theme.AppCompat.Dialog.Alert">
+		<item
+			name="android:timePickerMode">spinner</item>
+	</style>
+</resources>
