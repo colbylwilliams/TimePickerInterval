@@ -12,11 +12,20 @@ namespace TimePickerInterval.Droid
 		TimePicker timePicker;
 		IOnTimeSetListener listener;
 
+		int hourOfDay, minute;
+
 		public IntervalTimePickerDialog (Context context, IOnTimeSetListener listener, int hourOfDay, int minute, bool is24HourView, int interval)
-			: base (context, Resource.Style.IntervalPickerTheme, listener, hourOfDay, minute, is24HourView)
+			: base (context, Resource.Style.IntervalPickerTheme, listener, hourOfDay, minute/interval, is24HourView)
 		{
 			this.interval = interval;
 			this.listener = listener;
+			this.hourOfDay = hourOfDay;
+			this.minute = minute;
+		}
+
+		public override void OnTimeChanged (TimePicker view, int hourOfDay, int minute)
+		{
+			base.OnTimeChanged (view, hourOfDay, minute * interval);
 		}
 
 		public override void OnClick (IDialogInterface dialog, int which)
@@ -24,7 +33,9 @@ namespace TimePickerInterval.Droid
 			//base.OnClick (dialog, which);
 
 			timePicker?.ClearFocus ();
-			listener?.OnTimeSet (timePicker, timePicker.Hour, timePicker.Minute * interval);
+			var hour = timePicker.CurrentHour.IntValue ();
+			var minute = timePicker.CurrentMinute.IntValue();
+			listener?.OnTimeSet (timePicker, hour, minute * interval);
 		}
 
 		protected override void OnStop ()
@@ -44,7 +55,6 @@ namespace TimePickerInterval.Droid
 			Java.Lang.Reflect.Field field = classForId.GetField ("minute");
 
 			NumberPicker mMinuteSpinner = timePicker.FindViewById<NumberPicker> (field.GetInt (null));
-
 			if (mMinuteSpinner != null) {
 
 				mMinuteSpinner.MinValue = 0;
@@ -58,6 +68,7 @@ namespace TimePickerInterval.Droid
 
 				mMinuteSpinner.SetDisplayedValues (displayedValues.ToArray ());
 			}
+			OnTimeChanged (timePicker, hourOfDay, minute/interval);
 		}
 	}
 }
