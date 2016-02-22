@@ -16,6 +16,8 @@ namespace TimePickerInterval.Droid
 	public class IntervalTimePickerRenderer : ViewRenderer<IntervalTimePicker, EditText>, TimePickerDialog.IOnTimeSetListener
 	{
 
+		TimeSpan timeSpan;
+
 		protected override void OnElementChanged (ElementChangedEventArgs<IntervalTimePicker> e)
 		{
 			base.OnElementChanged (e);
@@ -39,7 +41,7 @@ namespace TimePickerInterval.Droid
 
 		void EditText_Click (object sender, EventArgs e)
 		{
-			dialog = new IntervalTimePickerDialog (Context, this, 0, 0, true, Element.Interval);
+			dialog = new IntervalTimePickerDialog (Context, this, timeSpan.Hours, timeSpan.Minutes, true, Element.Interval);
 
 			dialog.Show ();
 		}
@@ -47,7 +49,7 @@ namespace TimePickerInterval.Droid
 
 		public void OnTimeSet (Android.Widget.TimePicker view, int hourOfDay, int minute)
 		{
-			var timeSpan = new TimeSpan (hourOfDay, minute, 0);
+			timeSpan = new TimeSpan (hourOfDay, minute, 0);
 			setTime (timeSpan);
 		}
 
